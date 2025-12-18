@@ -1,4 +1,4 @@
-<section id="modal-order" class="modal-order">
+<div id="modal-order" class="modal-order visually-hidden">
   <div class="container">
     <div class="modal-wrapper">
       <button class="modal-close-btn" aria-label="Закрити модальне вікно">
@@ -17,7 +17,7 @@
             name="name"
             required
           />
-          <p class="error-text"></p>
+          <span class="error-text"></span>
         </label>
         <label class="modal-form-label"
           >Телефон*
@@ -28,7 +28,7 @@
             name="phone"
             required
           />
-          <p class="error-text"></p>
+          <span class="error-text"></span>
         </label>
         <label class="modal-form-label">
           Коментар
@@ -38,7 +38,7 @@
             rows="8"
             placeholder="Напишіть ваш коментар"
           ></textarea>
-          <p class="error-text"></p>
+          <span class="error-text"></span>
         </label>
         <button
           class="modal-form-submit-btn"
@@ -50,4 +50,4 @@
       </form>
     </div>
   </div>
-</section>
+</div>
