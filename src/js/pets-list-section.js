@@ -256,7 +256,7 @@ function animalTemplate({ _id, name, image, species, age, gender, categories, de
         .join('');
     
     return `
-     <li class="pets-item" data-id="${_id}">
+     <li class="pets-item" data-id="${_id}" tabindex="0">
      <div class="pets-img-wrapper"><img class="pets-img" src="${image}" alt="${name} - ${species}" /></div>
         <div class="pets-list-wrapper">
           <p class="pets-category">${species}</p>

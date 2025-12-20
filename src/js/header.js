@@ -1,3 +1,5 @@
+import { trapFocus } from "./animal-details-modal";
+
 const menuButton = document.querySelector('.header-burger-menu');
 const modal = document.querySelector('.header-modal');
 const closeButton = document.querySelector('.modal-close-button');
@@ -25,6 +27,8 @@ menuButton.addEventListener('click', event => {
   modal.classList.add('is-open');
   document.body.classList.add("is-modal-open");
   document.addEventListener("keydown", handleEscape);
+
+  trapFocus(modal);
 });
 
 closeButton.addEventListener('click', closeModal);

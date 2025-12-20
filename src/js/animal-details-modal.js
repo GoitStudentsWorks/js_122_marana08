@@ -44,7 +44,7 @@ function renderModal({
   behavior,
 }) {
   const markup = `
-    <div class="animal-modal" data-id="${_id}">
+    <div class="animal-modal" data-id="${_id}" tabindex="-1" role="dialog">
     <button
       class="details-modal-close-btn"
       type="button"
@@ -88,6 +88,9 @@ function handleCloseModalBtn() {
   refs.animalDetailsBackdrop.classList.remove('is-open');
   document.body.style.overflow = '';
   window.removeEventListener('keydown', handleEscPress);
+
+  const lastFocused = getLastFocusedElement();
+  if (lastFocused) lastFocused.focus();
 }
 function handleEscPress(e) {
   if (e.code === 'Escape') {
@@ -98,3 +101,32 @@ function handleBackdropClick(e) {
   if (e.currentTarget !== e.target) return;
   handleCloseModalBtn();
 }
+
+export function trapFocus(modal) {
+  modal.focus()
+  const focusableSelectors = `
+    a[href],
+    button:not([disabled]),
+    textarea,
+    input,
+    select,
+    [tabindex]:not([tabindex="-1"])
+  `;
+
+  const focusableElements = modal.querySelectorAll(focusableSelectors);
+  const firstEl = focusableElements[0];
+  const lastEl = focusableElements[focusableElements.length - 1];
+
+  modal.addEventListener('keydown', (e) => {
+    if (e.key !== 'Tab') return;
+
+    if (e.shiftKey && document.activeElement === firstEl) {
+      e.preventDefault();
+      lastEl.focus();
+    };
+    if (!e.shiftKey && document.activeElement === lastEl) {
+      e.preventDefault();
+      firstEl.focus();
+    }
+  });
+};
