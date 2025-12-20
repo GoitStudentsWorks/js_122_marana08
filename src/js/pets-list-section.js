@@ -4,9 +4,7 @@ import { ENDPOINTS, server } from "./server-api";
 import { refs } from "./refs";
 import { loadFromLS, saveToLS } from "./storage";
 import spriteUrl from '/img/sprite.svg';
-import { handleOpenModal } from "./animal-details-modal";
-
-
+import {openAnimalModal } from "./animal-details-modal";
 
 let limit = getLimitByScreen();
 let page = loadFromLS('page');
@@ -17,7 +15,7 @@ document.addEventListener('DOMContentLoaded', handleContentLoad);
 refs.petsLoadMoreBtn.addEventListener('click', handleLoadMoreBtnClick);
 refs.categoryList.addEventListener('click', handleCategoryBtnClick);
 refs.petsListPagination.addEventListener('click', handlePaginationClick);
-
+refs.petsList.addEventListener('click', handlePetsListClick);
 
 function getLimitByScreen() {
   const width = window.innerWidth;
@@ -46,7 +44,6 @@ async function handleContentLoad(e) {
     renderAnimals(animals);
     renderPagination();
     checkLoadMoreBtnStatus();
-    refs.petsList.addEventListener('click', (e) => handleOpenModal(e, animals));
   } catch (error) {
       iziToast.error({
           title: 'Помилка',
@@ -83,9 +80,6 @@ async function handleCategoryBtnClick(e) {
     renderAnimals(animals);    
     checkLoadMoreBtnStatus(); 
     renderPagination();
-    
-    refs.petsList.addEventListener('click', (e) => handleOpenModal(e, animals));
-
   } catch (error) {
       iziToast.error({
           title: 'Помилка',
@@ -108,10 +102,12 @@ async function handleLoadMoreBtnClick() {
 
     try {
         if (!categoryId) {
-            checkLoadMoreBtnStatus();
-            const animals = await fetchAllAnimals(page);
-            const markup = animalsTemplate(animals);
-            refs.petsList.insertAdjacentHTML('beforeend', markup);
+          checkLoadMoreBtnStatus();
+          const animals = await fetchAllAnimals(page);
+          const markup = animalsTemplate(animals);
+          refs.petsList.insertAdjacentHTML('beforeend', markup);
+          
+
         } else {
             checkLoadMoreBtnStatus();
             const animals = await fetchCategoryById(categoryId, page);
@@ -187,6 +183,16 @@ async function handlePaginationClick(e) {
     refs.loader.classList.remove('loader-center');
     saveToLS('page', page);
   }
+}
+
+function handlePetsListClick(e) {
+  const btn = e.target.closest('.pets-button');
+  if (!btn) return;
+
+  const card = btn.closest('li');
+  if (!card) return;
+  const id = card.dataset.id;
+  openAnimalModal(id);
 }
 
 
@@ -273,8 +279,9 @@ function animalsTemplate(animals) {
 }
 
 function renderAnimals(animals) {
-    const markup = animalsTemplate(animals);
-    refs.petsList.innerHTML = markup;
+  const markup = animalsTemplate(animals);
+  refs.petsList.innerHTML = markup;
+  saveToLS('animals', animals);
 }
 
 function renderPagination() {
