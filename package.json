@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build --base=/fluffy_team/",
+    "build": "vite build --base=/js_122_marana08/",
     "preview": "vite preview"
   },
   "devDependencies": {
